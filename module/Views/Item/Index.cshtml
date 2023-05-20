@@ -1,0 +1,128 @@
+﻿@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<IEnumerable<inprogress.dnn.module.Models.Item>>
+
+@using System.Text.RegularExpressions
+@using DotNetNuke.Web.Mvc.Helpers
+@using System.Linq
+@using System.Web.Mvc
+@using DotNetNuke.Web.Mvc
+@using System.Web.Mvc
+@using System.Web.Mvc.Html
+
+<h2>3D nyomtatás modul</h2>
+
+
+<div class="upload-form">
+    <div class="form-group">
+        <label for="file">Fájl feltöltése:</label>
+        <input type="file" name="file" id="file" class="form-control-file" />
+    </div>
+
+    <div class="form-group">
+        <label for="color">Szín választása:</label>
+        <select name="color" id="color" class="form-control">
+            <option value="red">Piros</option>
+            <option value="green">Zöld</option>
+            <option value="blue">Kék</option>
+            <option value="custom">Színhű</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="size">Méret választása:</label>
+        <select name="size" id="size" class="form-control">
+            <option value="small">Kicsi</option>
+            <option value="medium">Közepes</option>
+            <option value="large">Nagy</option>
+        </select>
+    </div>
+
+    <div id="model-viewer" class="model-viewer"></div>
+
+    @{
+        string buttonText = "Megrendelés";
+        string selectedSize = Request.Form["size"];
+        if (selectedSize == "large")
+        {
+            buttonText = "Árajánlat kérése";
+        }
+    }
+
+    <button type="button" class="btn btn-primary" id="order-button">@buttonText</button>
+</div>
+
+<style>
+    /* Stílusok itt */
+
+</style>
+
+<script>
+    var sizeSelect = document.getElementById("size");
+    var orderButton = document.getElementById("order-button");
+
+    sizeSelect.addEventListener("change", function () {
+        if (sizeSelect.value === "large") {
+            orderButton.innerHTML = "Árajánlat kérése";
+        } else {
+            orderButton.innerHTML = "Megrendelés";
+        }
+    });
+</script>
+
+<style>
+    .upload-form {
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .model-viewer {
+        width: 100%;
+        height: 300px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #337ab7;
+        border-color: #2e6da4;
+    }
+
+        .btn-primary:hover {
+            background-color: #286090
+        }
+</style>
