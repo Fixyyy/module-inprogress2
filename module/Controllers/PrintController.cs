@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
 
 namespace inprogress.dnn.module.Controllers
 {
@@ -15,30 +16,37 @@ namespace inprogress.dnn.module.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult UploadFile()
+        {
+            
+
+            
+            return View();
+        }
+
         [HttpPost]
         public ActionResult UploadFile(HttpPostedFileBase file)
         {
-            if (file != null && file.ContentLength > 0)
+            try
             {
-                // Fájl feltöltése és adatok kezelése
-
-                // Példa: Fájlnév mentése a modellbe
-                var model = new PrintModel();
-                model.FileName = file.FileName;
-
-                // Átirányítás a részletek nézetre
-                return RedirectToAction("Details", model);
+                if (file.ContentLength > 0)
+                {
+                    string _FileName = Path.GetFileName(file.FileName);
+                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
+                    file.SaveAs(_path);
+                }
+                ViewBag.Message = "File Uploaded Successfully!!";
+                return View();
             }
+            catch (Exception)
+            {
 
-            // Visszatérés az Index nézetre, ha nem történt fájl feltöltés
-            return View("Index");
+                ViewBag.Message = "File upload failed!!";
+                return View();
+            }
         }
 
-        public ActionResult Details(PrintModel model)
-        {
-            // Adatok kezelése és kalkuláció
-
-            return View(model);
-        }
+        
     }
 }

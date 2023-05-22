@@ -146,6 +146,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="UploadedFiles\" />
     <Folder Include="Views\Print\" />
   </ItemGroup>
   <ItemGroup>

@@ -8,8 +8,10 @@
 @using System.Web.Mvc
 @using System.Web.Mvc.Html
 
-<h2>3D nyomtatás modul</h2>
 
+@Model inp
+
+<h2>3D nyomtatás modul</h2>
 
 <div class="upload-form">
     <div class="form-group">
@@ -27,7 +29,7 @@
         </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="size-container">
         <label for="size">Méret választása:</label>
         <select name="size" id="size" class="form-control">
             <option value="small">Kicsi</option>
@@ -38,34 +40,35 @@
 
     <div id="model-viewer" class="model-viewer"></div>
 
-    @{
-        string buttonText = "Megrendelés";
-        string selectedSize = Request.Form["size"];
-        if (selectedSize == "large")
-        {
-            buttonText = "Árajánlat kérése";
-        }
-    }
-
-    <button type="button" class="btn btn-primary" id="order-button">@buttonText</button>
+    <div class="order-section">
+        <button type="button" class="btn btn-primary order-button" id="order-button">Megrendelés</button>
+        <div id="price-container" class="price"></div>
+    </div>
 </div>
-
-<style>
-    /* Stílusok itt */
-
-</style>
 
 <script>
     var sizeSelect = document.getElementById("size");
+    var colorSelect = document.getElementById("color");
     var orderButton = document.getElementById("order-button");
+    var priceContainer = document.getElementById("price-container");
 
-    sizeSelect.addEventListener("change", function () {
-        if (sizeSelect.value === "large") {
-            orderButton.innerHTML = "Árajánlat kérése";
-        } else {
-            orderButton.innerHTML = "Megrendelés";
+    sizeSelect.addEventListener("change", updatePrice);
+    colorSelect.addEventListener("change", updatePrice);
+
+    function updatePrice() {
+        var selectedSize = sizeSelect.value;
+        var selectedColor = colorSelect.value;
+        var price = 0;
+
+        if (selectedSize === "small") {
+            price = selectedColor === "custom" ? 9000 : 7500;
+        } else if (selectedSize === "medium") {
+            price = selectedColor === "custom" ? 14000 : 12500;
         }
-    });
+
+        priceContainer.innerHTML = price > 0 ? price + " forint" : "";
+        orderButton.innerHTML = selectedSize === "large" ? "Árajánlat kérése" : "Megrendelés";
+    }
 </script>
 
 <style>
@@ -125,4 +128,29 @@
         .btn-primary:hover {
             background-color: #286090
         }
+
+    
+    .price {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        margin-left: auto; 
+    }
+
+   
+    .order-button {
+        margin-left: 10px;
+    }
+
+    .order-section {
+        display: flex;
+        align-items: center;
+    }
+
+ 
+    #size-container {
+        font-size: 14px;
+        
+    }
 </style>
+
